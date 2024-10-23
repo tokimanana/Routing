@@ -1,3 +1,14 @@
+<p>
+  <a routerLink="./" [queryParams]="{order: order() === 'asc'? 'desc': 'asc'}">
+    Sort {{ order()  === 'asc' ? 'Descending' : 'Ascending'}}
+    <!-- <select [(ngModel)]="sortBy">
+      <option value="title">Title</option>
+      <option value="dueDate">Due Date</option>
+    </select> -->
+  </a>
+</p>
+
+
 <ul>
   @for (task of userTasks(); track task.id) {
     <li>
