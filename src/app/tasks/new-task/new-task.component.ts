@@ -1,6 +1,6 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { CanDeactivateFn, Router, RouterLink } from '@angular/router';
 
 import { TasksService } from '../tasks.service';
 
@@ -16,6 +16,7 @@ export class NewTaskComponent {
   enteredTitle = signal('');
   enteredSummary = signal('');
   enteredDate = signal('');
+  submitted = false;
   private tasksService = inject(TasksService);
   private router = inject(Router);
 
@@ -31,5 +32,18 @@ export class NewTaskComponent {
     this.router.navigate(['/users', this.userId(), 'tasks']),{
       replaceUrl: true,
     };
+
+    this.submitted = true;
+  }
+}
+
+export const canLeaveEditPage: CanDeactivateFn <NewTaskComponent> = (component) => {
+  if(component.submitted) {
+    return true;
+  }
+  if (component.enteredTitle() || component.enteredSummary() || component.enteredDate()) {
+    return window.confirm('Do you really want to leave? You will lose all your entered data!');
+  } else {
+    return true;
   }
 }
